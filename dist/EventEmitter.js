@@ -45,11 +45,9 @@ module.exports = (function(){
 		// Must be an array
 		if( !(this._events[eName] instanceof Array) ){ return false; }
 
-		var args = [].slice.apply(arguments, [1]);
-
 		// Trigger each
 		this._events[eName].forEach(function(cb){
-			cb instanceof Function && cb.apply(null, args);
+			cb instanceof Function && cb.apply(null, [].slice.apply(arguments, [1]));
 		});
 	};
 
