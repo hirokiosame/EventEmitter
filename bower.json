@@ -1,0 +1,22 @@
+{
+  "name": "EventEmitter",
+  "version": "0.0.0",
+  "homepage": "https://github.com/hirokiosame/EventEmitter",
+  "authors": [
+    "Hiroki Osame <hirokio@bu.edu>"
+  ],
+  "description": "Minimal event emitter",
+  "main": "dist/EventEmitter.min.js",
+  "keywords": [
+    "event",
+    "emitter"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
