@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 				js: 'dist/EventEmitter.js',
 				jsOutputFile: 'dist/EventEmitter.min.js',
 				options: {
-					'compilation_level': 'ADVANCED',
+					// 'compilation_level': 'ADVANCED',
 					// language_in: 'ECMASCRIPT5_STRICT',
 					'language_in': 'ECMASCRIPT5'
 				}
