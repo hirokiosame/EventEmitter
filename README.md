@@ -1,0 +1,2 @@
+# EventEmitter
+Minimal event emitter
