@@ -7,7 +7,7 @@ module.exports = (function(){
 		this._events = {};
 	}
 
-	EventEmitter.prototype.on = function(eName, fn){
+	EventEmitter.prototype.on = function on(eName, fn){
 
 		// Must be an object
 		if( !(this._events instanceof Object) ){ this._events = {}; }
@@ -21,7 +21,7 @@ module.exports = (function(){
 		return this;
 	};
 
-	EventEmitter.prototype.off = function(eName, fn){
+	EventEmitter.prototype.off = function off(eName, fn){
 
 		// Must be an object
 		if( !(this._events instanceof Object) ){ this._events = {}; }
@@ -37,7 +37,7 @@ module.exports = (function(){
 		return this;
 	};
 
-	EventEmitter.prototype.emit = function(eName){
+	EventEmitter.prototype.emit = function emit(eName){
 
 		// Must be an object
 		if( !(this._events instanceof Object) ){ this._events = {}; }
@@ -45,12 +45,22 @@ module.exports = (function(){
 		// Must be an array
 		if( !(this._events[eName] instanceof Array) ){ return false; }
 
+		// Slice out the arguments for emit
 		var args = [].slice.apply(arguments, [1]);
-		
+
 		// Trigger each
-		this._events[eName].forEach(function(cb){
-			cb instanceof Function && cb.apply(null, args);
-		});
+		var self = this,
+			evnts = this._events[eName],
+			cb;
+
+		for( var i = 0, len = evnts.length; i < len; i++ ){
+			if( !((cb = evnts[i]) instanceof Function) ){ continue; }
+
+			// Trigger asynchronously
+			setTimeout((function(self, cb, args){
+				return function(){ cb.apply(self, args); };
+			})(self, cb, args), 0);
+		}
 	};
 
 	return EventEmitter;
