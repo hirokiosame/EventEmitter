@@ -2,7 +2,7 @@
   "name": "eventemitter",
   "version": "1.0.0",
   "description": "Minimal event emitter",
-  "main": "dist/EventEmitter.min.js",
+  "main": "src/EventEmitter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

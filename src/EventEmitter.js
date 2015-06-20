@@ -15,7 +15,9 @@ module.exports = (function(){
 		var arr;
 
 		// Must be an array
-		if( !((arr = this._events[eName]) instanceof Array) ){ this._events[eName] = []; }
+		if( !((arr = this._events[eName]) instanceof Array) ){
+			(arr = this._events[eName] = []);
+		}
 
 		// Add function
 		arr.push(fn);
