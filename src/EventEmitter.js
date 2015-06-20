@@ -2,8 +2,9 @@ module.exports = (function(){
 
 	'use strict';
 
-	function EventEmitter(){
+	function EventEmitter(async){
 		this._events = {};
+		this.async = !!async || false;
 	}
 
 	EventEmitter.prototype.on = function on(eName, fn){
@@ -11,27 +12,44 @@ module.exports = (function(){
 		// Must be an object
 		if( !(this._events instanceof Object) ){ this._events = {}; }
 
+		var arr;
+
 		// Must be an array
-		if( !(this._events[eName] instanceof Array) ){ this._events[eName] = []; }
+		if( !((arr = this._events[eName]) instanceof Array) ){ this._events[eName] = []; }
 
 		// Add function
-		this._events[eName].push(fn);
+		arr.push(fn);
 
 		return this;
 	};
 
 	EventEmitter.prototype.off = function off(eName, fn){
 
-		// Must be an object
-		if( !(this._events instanceof Object) ){ this._events = {}; }
+		// If events not initialized or
+		// If no event name, remove all events
+		if(
+			!(this._events instanceof Object) ||
+			eName === undefined
+		){ this._events = {}; }
 
-		// Must be an array
-		if( !(this._events[eName] instanceof Array) ){ return false; }
+
+		var arr, idx;
+
+		// If no events to remove
+		if( !((arr = this._events[eName]) instanceof Array) ){
+			return false;
+		}
+
+		// Remove all
+		if( fn === undefined ){
+			arr.splice(0);
+		}
 
 		// Remove function
-		var arr = this._events[eName];
+		else if( (idx = arr.indexOf(fn)) !== -1 ){
+			arr.splice(idx, 1);
+		}
 
-		arr.splice(arr.indexOf(fn), 1);
 
 		return this;
 	};
@@ -48,17 +66,22 @@ module.exports = (function(){
 		var args = [].slice.apply(arguments, [1]);
 
 		// Trigger each
-		var self = this,
-			evnts = this._events[eName],
+		var evnts = this._events[eName],
 			cb;
 
 		for( var i = 0, len = evnts.length; i < len; i++ ){
+
+			// Validate function
 			if( !((cb = evnts[i]) instanceof Function) ){ continue; }
 
 			// Trigger asynchronously
-			setTimeout((function(self, cb, args){
-				return function(){ cb.apply(self, args); };
-			})(self, cb, args), 0);
+			if( this.async === true ){
+				setTimeout((function(self, cb, args){
+					return function(){ cb.apply(self, args); };
+				})(this, cb, args), 0);
+			}else{
+				cb.apply(this, args);
+			}
 		}
 	};
 
