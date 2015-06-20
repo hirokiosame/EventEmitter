@@ -4,7 +4,7 @@ module.exports = (function(){
 
 	function EventEmitter(async){
 		this._events = {};
-		this.async = !!async || false;
+		this.async = !!async;
 	}
 
 	EventEmitter.prototype.on = function on(eName, fn){
